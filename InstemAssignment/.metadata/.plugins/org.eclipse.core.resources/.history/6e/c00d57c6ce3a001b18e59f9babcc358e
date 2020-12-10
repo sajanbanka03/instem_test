@@ -1,0 +1,20 @@
+package com.inT.qa.testcases;
+
+import org.testng.annotations.BeforeMethod;
+
+import com.inT.qa.base.BaseClass;
+import com.inT.qa.pages.loginPage;
+
+public class loginTestCase extends BaseClass
+{
+	loginPage login;
+	public loginTestCase(){
+		super(); //We are calling super class constructor i.e. we are calling BaseClass constructor because we have to initialize properties
+	}
+	
+	@BeforeMethod
+	public void setup(){
+		initialize();// since we have called the constructor above, we will not get null pointer exception for objects used in this method
+		login = new loginPage();
+	}
+}

@@ -1,0 +1,16 @@
+package com.inT.qa.testcases;
+
+import org.testng.annotations.Test;
+
+import com.inT.qa.base.BaseClass;
+
+public class searchPagetestcases extends BaseClass
+{
+
+	@Test(priority = 4)
+	public void verifySerachPageTitle()
+	{
+		String searchtitle = properties.getProperty("serachpageTitle");
+		assrt.assertEquals(searchtitle, driver.getTitle());
+	}
+}

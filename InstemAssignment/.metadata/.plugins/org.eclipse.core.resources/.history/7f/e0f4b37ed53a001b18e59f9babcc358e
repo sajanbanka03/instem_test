@@ -1,0 +1,23 @@
+package com.inT.qa.testcases;
+
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.inT.qa.base.BaseClass;
+import com.inT.qa.pages.loginPage;
+
+public class searchPagetestcases extends BaseClass
+{
+	@BeforeMethod
+	public void setup(){
+		initialize();// since we have called the constructor above, we will not get null pointer exception for objects used in this method
+		serachpg = new serachPage();
+	}
+
+	@Test(priority = 4)
+	public void verifySerachPageTitle()
+	{
+		String searchtitle = properties.getProperty("serachpageTitle");
+		assrt.assertEquals(searchtitle, driver.getTitle());
+	}
+}

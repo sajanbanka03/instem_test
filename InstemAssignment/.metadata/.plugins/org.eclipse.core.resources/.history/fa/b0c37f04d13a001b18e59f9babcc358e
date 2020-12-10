@@ -1,0 +1,75 @@
+package com.inT.qa.pages;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.testng.Reporter;
+
+import com.inT.qa.base.BaseClass;
+import com.inT.qa.util.TestUtil;
+
+public class loginPage extends BaseClass
+{
+	//ObjectRepository
+		@FindBy(id = "usrname")
+		WebElement username;
+		
+		@FindBy(id = "passwrd")
+		WebElement password;
+		
+		@FindBy(id = "login")
+		WebElement loginBtn;
+		
+		@FindBy(id = "forget")
+		WebElement forgetPwd;
+		
+		@FindBy(id = "loginTitle")
+		WebElement lgntitle;
+		
+		@FindBy(id = "invalidloginmsg") //-- creating this object for invalid login error message incase of wrong username/password
+		WebElement invalidLgnmsg;
+		public loginPage()
+		{
+			PageFactory.initElements(driver, this); //this pointing towards current class
+		}
+		
+		public String pageTitle()
+		{
+			return driver.getTitle();
+		}
+		public String loginTitle()
+		{
+			return lgntitle.getText();
+		}
+		
+		public String invalidlogin()
+		{
+			return invalidLgnmsg.getText();
+		}
+		
+		public void login(String uname, String pwd){ //We have changes return type to NDTVWeatherPage because when we run this function we will land to weather page i..e. it is returning weather page
+			if(username.isEnabled())
+			{
+				username.click();
+				username.sendKeys(uname);
+				if(password.isEnabled())
+				{
+					password.click();
+					password.sendKeys(pwd);
+				}
+				else
+				{
+					Reporter.log("Password field is not enabled");
+				}
+			}
+			else
+			{
+				Reporter.log("Username field is not enabled");
+			}
+				
+			loginBtn.click();
+		}
+
+}

@@ -1,0 +1,119 @@
+package com.inT.qa.util;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Reporter;
+
+import com.inT.qa.base.BaseClass;
+
+
+
+public class TestUtil extends BaseClass{
+
+	public static long Page_Load_Time = 20;
+	public static long IMPLICIT_WAIT = 10;
+	public static int Status_Code_200 = 200;
+	public static String TESTDATA_SHEET_PATH = properties.getProperty("testdatasheet");
+	static HSSFRow row;static HSSFCell cell;
+	//public String testdata;
+	
+	public static List<String> ReadData(String sheetName) throws IOException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		//File file = new File(fileName);
+		FileInputStream stream = new FileInputStream(TESTDATA_SHEET_PATH);
+		HSSFWorkbook workbook = new HSSFWorkbook(stream);
+		HSSFSheet sheet1 = workbook.getSheet(sheetName);
+		List<String> testdata = new ArrayList<String>();
+		for(int i=0; i<sheet1.getPhysicalNumberOfRows();i++)
+		{
+			row = sheet1.getRow(i);
+				System.out.println("Row no: "+ i);
+				//testdata.clear();
+			for(int j=0; j<row.getPhysicalNumberOfCells();j++)
+			{
+				cell=row.getCell(j);
+				//System.out.println(cell.getStringCellValue());
+				testdata.add(cell.getStringCellValue());
+			}
+			System.out.println("items: "+testdata+" added in list");
+						
+		FileOutputStream output = new FileOutputStream(TESTDATA_SHEET_PATH); // It will unlock the file which was locked by FileInputStream
+		workbook.write(output);
+	}
+		return testdata;
+}
+	public void selectvaluefromdropDown(WebElement ele, String val)
+	{
+		Select obj = new Select(ele);
+		obj.selectByVisibleText(val);
+	}
+	
+	public void datePicker(WebElement calender, WebElement calNextButton, WebElement calprevButton, WebElement calmidButton, String date ) throws Exception{
+        
+        calender.click();
+        
+        //Expecting the date to be in dd/mm/yyyy format
+
+        String dateSelect[] = date.split("/");
+        
+        int yearDiff = Integer.parseInt(dateSelect[2])- Calendar.getInstance().get(Calendar.YEAR);
+
+        calmidButton.click();
+
+        if(yearDiff!=0){
+
+            if(yearDiff>0){
+
+                for(int i=0;i< yearDiff;i++){
+
+                    //System.out.println("Year is"+i);
+                    calNextButton.click();
+                }
+            }
+
+            else if(yearDiff<0){
+
+                for(int i=0;i< (yearDiff*(-1));i++){
+
+                    System.out.println("Year difference is"+i);
+
+                    calprevButton.click();
+                }
+            }
+        }
+        List<WebElement> months = driver.findElements(By.xpath("xpath for months"));
+        if(Integer.parseInt(dateSelect[1])>=1 && Integer.parseInt(dateSelect[1])<=12)
+        {        
+        	months.get(Integer.parseInt(dateSelect[1])-1).click();
+        }
+        else{
+        	Reporter.log("Invalid month");
+        }
+        
+        Thread.sleep(1500);
+        List<WebElement> dates = driver.findElements(By.xpath("xpath for dates using td"));
+        if(Integer.parseInt(dateSelect[0])>=1 && Integer.parseInt(dateSelect[0])<=31)
+        {        
+        	dates.get(Integer.parseInt(dateSelect[0])-1).click();
+        }
+        else{
+        	Reporter.log("Invalid month");
+        }
+        
+        }
+
+}

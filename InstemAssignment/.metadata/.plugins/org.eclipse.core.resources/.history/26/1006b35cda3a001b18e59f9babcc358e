@@ -1,0 +1,98 @@
+package com.inT.qa.pages;
+
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+import com.inT.qa.base.BaseClass;
+
+public class serachPage extends BaseClass
+{
+
+	public String temp;
+	//ObjectRepository
+	@FindBy(id = "subjectStatus")
+	WebElement subjectStatus;
+	
+	@FindBy(id = "firstname")
+	WebElement firstname;
+	
+	@FindBy(id = "lastname")
+	WebElement lastname;
+	
+	@FindBy(id = "chkcurrent")
+	WebElement chkbxCurrent;
+	
+	@FindBy(id = "Recorderror") //Creating this object for an error incase wrong details are entered.
+	WebElement recorderror;
+	
+	@FindBy(id = "datepicker")
+	WebElement calender;
+	
+	@FindBy(xpath = "xpath for year next button")
+	WebElement yearNextButton;
+	
+	@FindBy(xpath = "xpath for year previous button")
+	WebElement yearPrevButton;
+	
+	@FindBy(xpath = "xpath for year mid button")
+	WebElement yearMidButton;
+	
+//	@FindBy(xpath = "//div[@class = 'leaflet-popup-content']")
+//	WebElement weatherDetails;
+	
+	public serachPage()
+	{
+		PageFactory.initElements(driver, this);
+	}
+	
+	public String searchPagetitle()
+	{
+		return driver.getTitle();
+	}
+	
+	public void SearchCity(String city)
+	{
+		if(citynames.isDisplayed())
+		{
+			List<WebElement> checkboxes = citynames.findElements(By.cssSelector("input:checked[type='checkbox']"));
+			for(WebElement we : checkboxes)
+			{
+				we.click();
+			}
+			
+			if(citySearchBox.isDisplayed())
+			{
+				citySearchBox.click();
+				citySearchBox.sendKeys(city);
+				WebElement cityName = driver.findElement(By.id(city));
+				if(cityName.isDisplayed())
+				{
+					cityName.click();
+				}
+				
+			}
+			
+			Assert.assertTrue(tempDetails.isDisplayed());
+		}
+		
+	}
+	
+	public double captureTemp(){
+		if(tempDetails.isDisplayed())
+		{
+			temperature.click();
+			Assert.assertTrue(weatherDetails.isDisplayed());
+			if(weatherDetails.isDisplayed())
+			{
+				temp = temperature.getText();
+				System.out.println("Temp is: "+temp);
+			}
+		}
+		
+		double ndtvtemp = Double.parseDouble(temp.substring(0, 2));
+		 System.out.println("After splitting the temp"+ndtvtemp);
+		 
+		 return ndtvtemp;
+	}
+}

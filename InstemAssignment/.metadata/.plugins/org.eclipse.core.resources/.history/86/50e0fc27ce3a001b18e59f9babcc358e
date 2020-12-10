@@ -1,0 +1,10 @@
+package com.inT.qa.testcases;
+
+import com.inT.qa.base.BaseClass;
+
+public class loginTestCase extends BaseClass
+{
+	public loginTestCase(){
+		super(); //We are calling super class constructor i.e. we are calling BaseClass constructor because we have to initialize properties
+	}
+}
